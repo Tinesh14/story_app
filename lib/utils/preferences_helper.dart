@@ -5,15 +5,15 @@ class PreferencesHelper {
 
   PreferencesHelper({required this.sharedPreferences});
 
-  // static const dailyRestaurant = 'DAILY_RESTAURANT';
+  static const bearerToken = 'BEARER_TOKEN';
 
-  // Future<bool?> get isDailyRestaurantActive async {
-  //   final prefs = await sharedPreferences;
-  //   return prefs.getBool(dailyRestaurant);
-  // }
+  Future<String?> get bearerTokenValue async {
+    final prefs = await sharedPreferences;
+    return prefs.getString(bearerToken);
+  }
 
-  // void setDailyResto(bool value) async {
-  //   final prefs = await sharedPreferences;
-  //   prefs.setBool(dailyRestaurant, value);
-  // }
+  void setBearerToken(String value) async {
+    final prefs = await sharedPreferences;
+    prefs.setString(bearerToken, value);
+  }
 }

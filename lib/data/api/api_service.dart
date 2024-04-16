@@ -2,12 +2,15 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:story_app/data/model/login.dart';
 import 'package:story_app/data/model/story.dart';
+import 'package:story_app/utils/preferences_helper.dart';
 
 class ApiService {
   static const String _baseUrl = 'https://story-api.dicoding.dev/v1';
-
+  final PreferencesHelper _preferencesHelper =
+      PreferencesHelper(sharedPreferences: SharedPreferences.getInstance());
   Future<bool> register(String name, String email, String password) async {
     try {
       Map<String, dynamic> data = {
@@ -58,7 +61,7 @@ class ApiService {
         "lat": lat,
         "lon": lon,
       };
-      var token = ""; //get token from storage
+      var token = _preferencesHelper.bearerTokenValue; //get token from storage
       final response = await http.post(
         Uri.parse("$_baseUrl/stories"),
         headers: {
@@ -79,7 +82,7 @@ class ApiService {
 
   Future<ListStory> getAllStories({int? page, int? size, int? location}) async {
     try {
-      var token = ""; //get token from storage
+      var token = _preferencesHelper.bearerTokenValue; //get token from storage
       final response = await http.get(
         Uri.parse("$_baseUrl/stories?page=$page&size=$size&location=$location"),
         headers: {
@@ -98,7 +101,7 @@ class ApiService {
 
   Future<Story> detailStory(String id) async {
     try {
-      var token = ""; //get token from storage
+      var token = _preferencesHelper.bearerTokenValue; //get token from storage
       final response = await http.get(
         Uri.parse("$_baseUrl/stories/$id"),
         headers: {
