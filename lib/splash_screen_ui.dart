@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class SplashScreenUi extends StatefulWidget {
   const SplashScreenUi({super.key});
@@ -15,15 +16,30 @@ class _SplashScreenUiState extends State<SplashScreenUi> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Loading Splash...',
-              textAlign: TextAlign.center,
+            Lottie.asset(
+              "assets/splash_screen_animation.json",
+              fit: BoxFit.contain,
+              repeat: false,
+              onLoaded: (p0) {
+                // _controller
+                //   ..duration = p0.duration
+                //   ..forward().whenComplete(
+                //     () => Navigator.popAndPushNamed(
+                //       context,
+                //       PageRoutes.bottomNavigation,
+                //     ),
+                //   );
+              },
             ),
+            // Text(
+            //   'Loading Splash...',
+            //   textAlign: TextAlign.center,
+            // ),
           ],
         ),
       ),

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:story_app/features/new_story/ui/new_story_ui.dart';
 import 'package:story_app/features/register/ui/register_ui.dart';
-import 'package:story_app/features/story_list/ui/story_list_ui.dart';
+import 'package:story_app/features/list_story/ui/list_story_ui.dart';
 
 import '../features/login/ui/login_ui.dart';
-import '../features/story_detail/ui/story_detail_ui.dart';
+import '../features/detail_story/ui/detail_story_ui.dart';
 import '../splash_screen_ui.dart';
 import '../utils/preferences_helper.dart';
 
@@ -25,7 +25,7 @@ class MyRouterDelegate extends RouterDelegate
     isLoggedIn = (token?.isNotEmpty ?? false);
     Future.delayed(
         const Duration(
-          seconds: 3,
+          seconds: 5,
         ), () {
       notifyListeners();
     });
@@ -46,7 +46,7 @@ class MyRouterDelegate extends RouterDelegate
   List<Page> get _loggedInStack => [
         MaterialPage(
           key: const ValueKey("StoryListPage"),
-          child: StoryListUi(
+          child: ListStoryUi(
             onTapped: (p0) {
               selectedStory = p0;
               notifyListeners();
@@ -70,7 +70,7 @@ class MyRouterDelegate extends RouterDelegate
         if (selectedStory != null)
           MaterialPage(
             key: ValueKey(selectedStory),
-            child: StoryDetailUi(
+            child: DetailStoryUi(
               id: selectedStory ?? '',
             ),
           ),

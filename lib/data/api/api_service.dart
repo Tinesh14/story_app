@@ -14,7 +14,7 @@ class ApiService {
   static const String _baseUrl = 'https://story-api.dicoding.dev/v1';
   final PreferencesHelper _preferencesHelper =
       PreferencesHelper(sharedPreferences: SharedPreferences.getInstance());
-      
+
   Future<Map> register(String name, String email, String password) async {
     try {
       Map<String, dynamic> data = {
@@ -57,7 +57,8 @@ class ApiService {
         "lat": lat,
         "lon": lon,
       };
-      var token = _preferencesHelper.bearerTokenValue; //get token from storage
+      var token =
+          await _preferencesHelper.bearerTokenValue; //get token from storage
       final response = await http.post(
         Uri.parse("$_baseUrl/stories"),
         headers: {
@@ -78,9 +79,15 @@ class ApiService {
 
   Future<ListStory> getAllStories({int? page, int? size, int? location}) async {
     try {
-      var token = _preferencesHelper.bearerTokenValue; //get token from storage
+      var token =
+          await _preferencesHelper.bearerTokenValue; //get token from storage
+      // final queryParameters = {
+      //   "page": page,
+      //   "size": size,
+      //   "location": location,
+      // };
       final response = await http.get(
-        Uri.parse("$_baseUrl/stories?page=$page&size=$size&location=$location"),
+        Uri.parse("$_baseUrl/stories"),
         headers: {
           "Authorization": "Bearer $token",
         },
@@ -97,7 +104,8 @@ class ApiService {
 
   Future<Story> detailStory(String id) async {
     try {
-      var token = _preferencesHelper.bearerTokenValue; //get token from storage
+      var token =
+          await _preferencesHelper.bearerTokenValue; //get token from storage
       final response = await http.get(
         Uri.parse("$_baseUrl/stories/$id"),
         headers: {
