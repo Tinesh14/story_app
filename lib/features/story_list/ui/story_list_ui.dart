@@ -27,6 +27,16 @@ class _StoryListUiState extends State<StoryListUi> {
           'INI PAGE STORY LIST !!!',
         ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          widget.onLogout();
+        },
+        tooltip: 'Logout',
+        icon: const Icon(
+          Icons.logout,
+        ),
+        label: const Text('LogOut'),
+      ),
     );
   }
 }

@@ -49,7 +49,8 @@ class MyRouterDelegate extends RouterDelegate
               selectedStory = p0;
               notifyListeners();
             },
-            onLogout: () {
+            onLogout: () async {
+              await _preferencesHelper.deleteToken();
               isLoggedIn = false;
               notifyListeners();
             },

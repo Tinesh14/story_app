@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-class PreferencesHelper { 
+class PreferencesHelper {
   final Future<SharedPreferences> sharedPreferences;
 
   PreferencesHelper({required this.sharedPreferences});
@@ -15,5 +15,10 @@ class PreferencesHelper {
   void setBearerToken(String value) async {
     final prefs = await sharedPreferences;
     prefs.setString(bearerToken, value);
+  }
+
+  Future<bool> deleteToken() async {
+    final prefs = await sharedPreferences;
+    return await prefs.remove(bearerToken);
   }
 }
