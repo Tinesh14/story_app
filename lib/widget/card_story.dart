@@ -48,7 +48,9 @@ class CardStory extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 24,
                         color: Colors.grey[800],
+                        overflow: TextOverflow.ellipsis,
                       ),
+                      maxLines: 1,
                     ),
                     Container(height: 5),
                     Text(
@@ -56,7 +58,9 @@ class CardStory extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 15,
                         color: Colors.grey[700],
+                        overflow: TextOverflow.ellipsis,
                       ),
+                      maxLines: 2,
                     ),
                   ],
                 ),
