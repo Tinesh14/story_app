@@ -2,6 +2,7 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class CardStory extends StatelessWidget {
   String imageUrl;
@@ -29,6 +30,12 @@ class CardStory extends StatelessWidget {
             children: <Widget>[
               Center(
                 child: CachedNetworkImage(
+                  cacheManager: CacheManager(
+                    Config(
+                      "cache-key-name",
+                      stalePeriod: const Duration(days: 7),
+                    ),
+                  ),
                   imageUrl: imageUrl,
                   height: 160,
                   width: double.infinity,

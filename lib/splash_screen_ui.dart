@@ -25,21 +25,7 @@ class _SplashScreenUiState extends State<SplashScreenUi> {
               "assets/splash_screen_animation.json",
               fit: BoxFit.contain,
               repeat: false,
-              onLoaded: (p0) {
-                // _controller
-                //   ..duration = p0.duration
-                //   ..forward().whenComplete(
-                //     () => Navigator.popAndPushNamed(
-                //       context,
-                //       PageRoutes.bottomNavigation,
-                //     ),
-                //   );
-              },
             ),
-            // Text(
-            //   'Loading Splash...',
-            //   textAlign: TextAlign.center,
-            // ),
           ],
         ),
       ),
