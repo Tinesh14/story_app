@@ -103,6 +103,7 @@ class _RegisterUiState extends State<RegisterUi> {
                             ? const Center(child: CircularProgressIndicator())
                             : ElevatedButton(
                                 onPressed: () {
+                                  FocusScope.of(context).unfocus();
                                   if (formKey.currentState?.validate() ??
                                       false) {
                                     BlocProvider.of<RegisterCubit>(context)
@@ -119,7 +120,13 @@ class _RegisterUiState extends State<RegisterUi> {
                               ),
                         const SizedBox(height: 8),
                         OutlinedButton(
-                          onPressed: () => widget.onLogin(),
+                          onPressed: () {
+                            FocusScope.of(context).unfocus();
+                            nameController.clear();
+                            emailController.clear();
+                            passwordController.clear();
+                            widget.onLogin();
+                          },
                           child: const Text("Login"),
                         ),
                       ],
@@ -154,6 +161,7 @@ class _RegisterUiState extends State<RegisterUi> {
           },
           listener: (context, state) {
             if (state is RegisterSuccess) {
+              nameController.clear();
               emailController.clear();
               passwordController.clear();
               widget.onRegister();

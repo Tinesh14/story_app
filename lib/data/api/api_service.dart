@@ -8,9 +8,13 @@ import 'package:story_app/data/model/story.dart';
 import 'package:story_app/utils/preferences_helper.dart';
 
 class ApiService {
+  //dicoding story app account
+  //testerdicoding@gmail.com
+  //testermobile123
   static const String _baseUrl = 'https://story-api.dicoding.dev/v1';
   final PreferencesHelper _preferencesHelper =
       PreferencesHelper(sharedPreferences: SharedPreferences.getInstance());
+      
   Future<Map> register(String name, String email, String password) async {
     try {
       Map<String, dynamic> data = {
@@ -22,11 +26,7 @@ class ApiService {
         Uri.parse("$_baseUrl/register"),
         body: data,
       );
-      // if (response.statusCode == 201) {
       return jsonDecode(response.body);
-      // } else {
-      //   throw Exception('Failed to register');
-      // }
     } catch (e) {
       rethrow;
     }
@@ -43,11 +43,6 @@ class ApiService {
         body: data,
       );
       return LoginResult.fromJson(jsonDecode(response.body));
-      // if () {
-      //   return LoginResult.fromJson(jsonDecode(response.body));
-      // } else {
-      //   throw Exception('Failed to login');
-      // }
     } catch (e) {
       rethrow;
     }

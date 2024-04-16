@@ -22,7 +22,12 @@ class MyRouterDelegate extends RouterDelegate
   _init() async {
     var token = await _preferencesHelper.bearerTokenValue;
     isLoggedIn = (token?.isNotEmpty ?? false);
-    notifyListeners();
+    Future.delayed(
+        const Duration(
+          seconds: 3,
+        ), () {
+      notifyListeners();
+    });
   }
 
   @override

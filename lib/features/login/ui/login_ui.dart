@@ -88,6 +88,7 @@ class _LoginUiState extends State<LoginUi> {
                             ? const Center(child: CircularProgressIndicator())
                             : ElevatedButton(
                                 onPressed: () {
+                                  FocusScope.of(context).unfocus();
                                   if (formKey.currentState?.validate() ??
                                       false) {
                                     BlocProvider.of<LoginCubit>(context).login(
@@ -102,6 +103,7 @@ class _LoginUiState extends State<LoginUi> {
                         const SizedBox(height: 8),
                         OutlinedButton(
                           onPressed: () {
+                            FocusScope.of(context).unfocus();
                             emailController.clear();
                             passwordController.clear();
                             widget.onRegister();
