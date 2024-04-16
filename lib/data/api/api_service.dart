@@ -11,7 +11,7 @@ class ApiService {
   static const String _baseUrl = 'https://story-api.dicoding.dev/v1';
   final PreferencesHelper _preferencesHelper =
       PreferencesHelper(sharedPreferences: SharedPreferences.getInstance());
-  Future<bool> register(String name, String email, String password) async {
+  Future<Map> register(String name, String email, String password) async {
     try {
       Map<String, dynamic> data = {
         "name": name,
@@ -20,13 +20,13 @@ class ApiService {
       };
       final response = await http.post(
         Uri.parse("$_baseUrl/register"),
-        body: jsonEncode(data),
+        body: data,
       );
-      if (response.statusCode == 201) {
-        return true;
-      } else {
-        throw Exception('Failed to register');
-      }
+      // if (response.statusCode == 201) {
+      return jsonDecode(response.body);
+      // } else {
+      //   throw Exception('Failed to register');
+      // }
     } catch (e) {
       rethrow;
     }
@@ -40,13 +40,14 @@ class ApiService {
       };
       final response = await http.post(
         Uri.parse("$_baseUrl/login"),
-        body: jsonEncode(data),
+        body: data,
       );
-      if (response.statusCode == 201) {
-        return LoginResult.fromJson(jsonDecode(response.body));
-      } else {
-        throw Exception('Failed to login');
-      }
+      return LoginResult.fromJson(jsonDecode(response.body));
+      // if () {
+      //   return LoginResult.fromJson(jsonDecode(response.body));
+      // } else {
+      //   throw Exception('Failed to login');
+      // }
     } catch (e) {
       rethrow;
     }
