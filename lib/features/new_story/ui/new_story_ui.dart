@@ -10,6 +10,17 @@ class NewStoryUi extends StatefulWidget {
 class _NewStoryUiState extends State<NewStoryUi> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Add Story',
+        ),
+      ),
+      body: const Center(
+        child: Text(
+          'INI PAGE ADD STORY !!!',
+        ),
+      ),
+    );
   }
 }

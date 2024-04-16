@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:story_app/features/new_story/ui/new_story_ui.dart';
 import 'package:story_app/features/register/ui/register_ui.dart';
 import 'package:story_app/features/story_list/ui/story_list_ui.dart';
 
@@ -35,6 +36,7 @@ class MyRouterDelegate extends RouterDelegate
   String? selectedStory;
   List<Page> historyStack = [];
   bool isRegister = false;
+  bool isAddStory = false;
   List<Page> get _splashStack => const [
         MaterialPage(
           key: ValueKey("SplashScreen"),
@@ -54,8 +56,17 @@ class MyRouterDelegate extends RouterDelegate
               isLoggedIn = false;
               notifyListeners();
             },
+            onAddStory: () {
+              isAddStory = true;
+              notifyListeners();
+            },
           ),
         ),
+        if (isAddStory)
+          const MaterialPage(
+            key: ValueKey("Add Story"),
+            child: NewStoryUi(),
+          ),
         if (selectedStory != null)
           MaterialPage(
             key: ValueKey(selectedStory),
@@ -113,6 +124,7 @@ class MyRouterDelegate extends RouterDelegate
         }
 
         isRegister = false;
+        isAddStory = false;
         selectedStory = null;
         notifyListeners();
 
