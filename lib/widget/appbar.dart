@@ -44,19 +44,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [
             SliverAppBar(
-              backgroundColor: Colors.orange,
               pinned: true,
-              automaticallyImplyLeading: false,
               expandedHeight: 200,
-              leading: IconButton(
-                icon: const Icon(
-                  Icons.arrow_back,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
               forceElevated: innerBoxIsScrolled,
               flexibleSpace: FlexibleSpaceBar(
                 background: Hero(
@@ -75,7 +64,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   widget.titleAppBar.toString(),
                   style: TextStyle(
                     fontSize: widget.titleSize ?? 22,
-                    color: Colors.white,
+                    color: Colors.black,
                   ),
                 ),
               ),
