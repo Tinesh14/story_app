@@ -8,9 +8,6 @@ import 'package:story_app/data/model/story.dart';
 import 'package:story_app/utils/preferences_helper.dart';
 
 class ApiService {
-  //dicoding story app account
-  //testerdicoding@gmail.com
-  //testermobile123
   static const String _baseUrl = 'https://story-api.dicoding.dev/v1';
   final PreferencesHelper _preferencesHelper =
       PreferencesHelper(sharedPreferences: SharedPreferences.getInstance());
@@ -89,11 +86,6 @@ class ApiService {
     try {
       var token =
           await _preferencesHelper.bearerTokenValue; //get token from storage
-      // final queryParameters = {
-      //   "page": page,
-      //   "size": size,
-      //   "location": location,
-      // };
       final response = await http.get(
         Uri.parse("$_baseUrl/stories"),
         headers: {
@@ -110,7 +102,7 @@ class ApiService {
     }
   }
 
-  Future<Story> detailStory(String id) async {
+  Future<DetailStory> detailStory(String id) async {
     try {
       var token =
           await _preferencesHelper.bearerTokenValue; //get token from storage
@@ -121,7 +113,7 @@ class ApiService {
         },
       );
       if (response.statusCode == 200) {
-        return Story.fromJson(jsonDecode(response.body));
+        return DetailStory.fromJson(jsonDecode(response.body));
       } else {
         throw Exception('Failed to getAllStories');
       }

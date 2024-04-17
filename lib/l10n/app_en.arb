@@ -27,5 +27,6 @@
     "noData": "No Data Available !!!",
     "error": "Error",
     "tryAgain": "Try Again",
-    "offline" : "This internet is offline !!!"
+    "offline" : "This internet is offline !!!",
+    "detailStory": "Detail Story"
 }

@@ -29,20 +29,24 @@ class CardStory extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Center(
-                child: CachedNetworkImage(
-                  cacheManager: CacheManager(
-                    Config(
-                      "cache-key-name",
-                      stalePeriod: const Duration(days: 7),
+                child: Hero(
+                  tag: imageUrl,
+                  child: CachedNetworkImage(
+                    cacheManager: CacheManager(
+                      Config(
+                        "cache-key-name",
+                        stalePeriod: const Duration(days: 7),
+                      ),
                     ),
+                    imageUrl: imageUrl,
+                    height: 160,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) =>
+                        const CircularProgressIndicator(),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
                   ),
-                  imageUrl: imageUrl,
-                  height: 160,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) =>
-                      const CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
               ),
               Container(
