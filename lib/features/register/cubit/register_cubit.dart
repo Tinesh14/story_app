@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:story_app/data/api/api_service.dart';
 import 'package:story_app/features/register/cubit/register_state.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RegisterCubit extends Cubit<RegisterState> {
+  final AppLocalizations? locale;
   final ApiService apiService;
-  RegisterCubit(this.apiService) : super(RegisterInitial());
+  RegisterCubit(this.apiService, {this.locale}) : super(RegisterInitial());
 
   register(String name, String email, String password) async {
     if (email.isNotEmpty && password.isNotEmpty && name.isNotEmpty) {
@@ -17,17 +19,17 @@ class RegisterCubit extends Cubit<RegisterState> {
           emit(RegisterSuccess());
         }
         emit(RegisterMessage(
-            message: response['message'] ?? 'Gagal Register !!!'));
+            message: response['message'] ?? locale!.registerFailed));
         emit(RegisterInitial());
       } catch (e) {
         if (e is SocketException) {
           emit(RegisterOffline());
         } else {
-          emit(const RegisterError(message: 'Something Went Wrong !!!'));
+          emit(RegisterError(message: locale!.sww));
         }
       }
     } else {
-      emit(const RegisterMessage(message: 'Silahkan isi semua field !!!'));
+      emit(RegisterMessage(message: locale!.validateAllField));
     }
   }
 

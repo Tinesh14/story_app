@@ -5,10 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:story_app/data/api/api_service.dart';
 import 'package:image/image.dart';
 import 'package:story_app/features/new_story/cubit/new_story_state.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NewStoryCubit extends Cubit<NewStoryState> {
+  AppLocalizations? locale;
   final ApiService apiService;
-  NewStoryCubit(this.apiService) : super(NewStoryInitial());
+  NewStoryCubit(this.apiService, {this.locale}) : super(NewStoryInitial());
 
   Future uploadStory(
       String description, List<int> bytes, String fileName) async {
@@ -19,13 +21,13 @@ class NewStoryCubit extends Cubit<NewStoryState> {
         emit(NewStorySuccess());
       } else {
         emit(NewStoryMessage(
-            message: response['message'] ?? 'Gagal Upload Story !!!'));
+            message: response['message'] ?? locale!.failedUploadStory));
       }
     } catch (e) {
       if (e is SocketException) {
         emit(NewStoryOffline());
       } else {
-        emit(const NewStoryError(message: 'Something Went Wrong !!!'));
+        emit(NewStoryError(message: locale!.sww));
       }
     }
   }

@@ -13,6 +13,7 @@ import 'package:story_app/utils/snackbar.dart';
 import 'package:story_app/widget/error.dart';
 import 'package:story_app/widget/loading.dart';
 import 'package:story_app/widget/offline.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NewStoryUi extends StatefulWidget {
   Function() onRefreshListStory;
@@ -45,10 +46,11 @@ class _NewStoryUiState extends State<NewStoryUi> {
 
   @override
   Widget build(BuildContext context) {
+    var locale = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'New Story',
+        title: Text(
+          locale!.addStory,
         ),
       ),
       body: BlocProvider<NewStoryCubit>(
@@ -89,11 +91,11 @@ class _NewStoryUiState extends State<NewStoryUi> {
                         children: [
                           ElevatedButton(
                             onPressed: () => _onGalleryView(),
-                            child: const Text("Gallery"),
+                            child: Text(locale.gallery),
                           ),
                           ElevatedButton(
                             onPressed: () => _onCameraView(),
-                            child: const Text("Camera"),
+                            child: Text(locale.camera),
                           ),
                         ],
                       ),
@@ -108,12 +110,12 @@ class _NewStoryUiState extends State<NewStoryUi> {
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15.0),
                             ),
-                            hintText: "Description",
+                            hintText: locale.description,
                           ),
                           maxLines: 4,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your description.';
+                              return locale.validateDescription;
                             }
                             return null;
                           },
@@ -132,7 +134,7 @@ class _NewStoryUiState extends State<NewStoryUi> {
                                 await upload();
                               }
                             },
-                            child: const Text("Upload"),
+                            child: Text(locale.upload),
                           ),
                         ],
                       ),

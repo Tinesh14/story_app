@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OfflineAnimation extends StatelessWidget {
   Function()? onPressed;
@@ -12,18 +13,19 @@ class OfflineAnimation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var locale = AppLocalizations.of(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Lottie.asset(
           'assets/no_internet_animation.json',
         ),
-        const Text('This internet is offline !!!'),
+        Text(locale!.offline),
         TextButton(
           onPressed: onPressed,
-          child: const Text(
-            'Try Again',
-            style: TextStyle(
+          child: Text(
+            locale.tryAgain,
+            style: const TextStyle(
               color: Colors.blue,
             ),
           ),

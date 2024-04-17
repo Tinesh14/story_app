@@ -6,6 +6,7 @@ import 'package:story_app/features/register/cubit/register_state.dart';
 import 'package:story_app/utils/snackbar.dart';
 import 'package:story_app/widget/error.dart';
 import 'package:story_app/widget/offline.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RegisterUi extends StatefulWidget {
   final Function() onLogin;
@@ -36,9 +37,10 @@ class _RegisterUiState extends State<RegisterUi> {
 
   @override
   Widget build(BuildContext context) {
+    var locale = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Register Screen"),
+        title: Text(locale!.registerTitle),
       ),
       body: BlocProvider<RegisterCubit>(
         create: (context) => RegisterCubit(
@@ -63,12 +65,12 @@ class _RegisterUiState extends State<RegisterUi> {
                           controller: nameController,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your name.';
+                              return locale.validateName;
                             }
                             return null;
                           },
-                          decoration: const InputDecoration(
-                            hintText: "Name",
+                          decoration: InputDecoration(
+                            hintText: locale.name,
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -76,24 +78,24 @@ class _RegisterUiState extends State<RegisterUi> {
                           controller: emailController,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your email.';
+                              return locale.validateEmail;
                             }
                             return null;
                           },
-                          decoration: const InputDecoration(
-                            hintText: "Email",
+                          decoration: InputDecoration(
+                            hintText: locale.email,
                           ),
                         ),
                         const SizedBox(height: 8),
                         TextFormField(
                           controller: passwordController,
                           obscureText: true,
-                          decoration: const InputDecoration(
-                            hintText: "Password",
+                          decoration: InputDecoration(
+                            hintText: locale.password,
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your password.';
+                              return locale.validatePassword;
                             }
                             return null;
                           },
@@ -114,8 +116,8 @@ class _RegisterUiState extends State<RegisterUi> {
                                     );
                                   }
                                 },
-                                child: const Text(
-                                  'Register',
+                                child: Text(
+                                  locale.register,
                                 ),
                               ),
                         const SizedBox(height: 8),
@@ -127,7 +129,9 @@ class _RegisterUiState extends State<RegisterUi> {
                             passwordController.clear();
                             widget.onLogin();
                           },
-                          child: const Text("Login"),
+                          child: Text(
+                            locale.login,
+                          ),
                         ),
                       ],
                     ),

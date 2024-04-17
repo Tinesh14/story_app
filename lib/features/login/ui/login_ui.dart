@@ -6,6 +6,7 @@ import 'package:story_app/features/login/cubit/login_state.dart';
 import 'package:story_app/utils/snackbar.dart';
 import 'package:story_app/widget/error.dart';
 import 'package:story_app/widget/offline.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginUi extends StatefulWidget {
   final Function() onLogin;
@@ -34,13 +35,15 @@ class _LoginUiState extends State<LoginUi> {
 
   @override
   Widget build(BuildContext context) {
+    var locale = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Login Screen"),
+        title: Text(locale!.loginTitle),
       ),
       body: BlocProvider<LoginCubit>(
         create: (context) => LoginCubit(
           ApiService(),
+          locale: locale,
         ),
         child: BlocConsumer<LoginCubit, LoginState>(
           buildWhen: (previous, current) =>
@@ -61,24 +64,24 @@ class _LoginUiState extends State<LoginUi> {
                           controller: emailController,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your email.';
+                              return locale.validateEmail;
                             }
                             return null;
                           },
-                          decoration: const InputDecoration(
-                            hintText: "Email",
+                          decoration: InputDecoration(
+                            hintText: locale.email,
                           ),
                         ),
                         const SizedBox(height: 8),
                         TextFormField(
                           controller: passwordController,
                           obscureText: true,
-                          decoration: const InputDecoration(
-                            hintText: "Password",
+                          decoration: InputDecoration(
+                            hintText: locale.password,
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your password.';
+                              return locale.validatePassword;
                             }
                             return null;
                           },
@@ -96,8 +99,8 @@ class _LoginUiState extends State<LoginUi> {
                                         passwordController.text);
                                   }
                                 },
-                                child: const Text(
-                                  'Login',
+                                child: Text(
+                                  locale.login,
                                 ),
                               ),
                         const SizedBox(height: 8),
@@ -108,7 +111,7 @@ class _LoginUiState extends State<LoginUi> {
                             passwordController.clear();
                             widget.onRegister();
                           },
-                          child: const Text("Register"),
+                          child: Text(locale.register),
                         ),
                       ],
                     ),

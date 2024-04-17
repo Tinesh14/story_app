@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:story_app/data/api/api_service.dart';
 import 'package:story_app/features/list_story/cubit/list_story_state.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ListStoryCubit extends Cubit<ListStoryState> {
+  AppLocalizations? locale;
   final ApiService apiService;
-  ListStoryCubit(this.apiService) : super(ListStoryLoading()) {
+  ListStoryCubit(this.apiService, {this.locale}) : super(ListStoryLoading()) {
     init();
   }
 
@@ -23,7 +25,7 @@ class ListStoryCubit extends Cubit<ListStoryState> {
       if (e is SocketException) {
         emit(ListStoryOffline());
       } else {
-        emit(const ListStoryError(message: 'Something Went Wrong !!!'));
+        emit(ListStoryError(message: locale!.sww));
       }
     }
   }

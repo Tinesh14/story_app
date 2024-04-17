@@ -9,6 +9,7 @@ import 'package:story_app/widget/empty.dart';
 import 'package:story_app/widget/error.dart';
 import 'package:story_app/widget/loading.dart';
 import 'package:story_app/widget/offline.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ListStoryUi extends StatefulWidget {
   final Function(String?) onTapped;
@@ -29,10 +30,11 @@ class _ListStoryUiState extends State<ListStoryUi> {
   ListStoryCubit? bloc;
   @override
   Widget build(BuildContext context) {
+    var locale = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Story',
+        title: Text(
+          locale!.story,
         ),
       ),
       body: Padding(
@@ -40,6 +42,7 @@ class _ListStoryUiState extends State<ListStoryUi> {
         child: BlocProvider<ListStoryCubit>(
           create: (context) => ListStoryCubit(
             ApiService(),
+            locale: locale,
           ),
           child: BlocConsumer<ListStoryCubit, ListStoryState>(
             builder: (context, state) {
@@ -99,14 +102,14 @@ class _ListStoryUiState extends State<ListStoryUi> {
         children: [
           SpeedDialChild(
             child: const Icon(Icons.logout),
-            label: 'Log Out',
+            label: locale.logOut,
             onTap: () {
               widget.onLogout();
             },
           ),
           SpeedDialChild(
             child: const Icon(Icons.add),
-            label: 'Add Story',
+            label: locale.addStory,
             onTap: () {
               widget.onAddStory(
                 () => bloc?.init(isLoad: true),
