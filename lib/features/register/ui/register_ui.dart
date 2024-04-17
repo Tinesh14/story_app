@@ -167,7 +167,7 @@ class _RegisterUiState extends State<RegisterUi> {
               widget.onRegister();
             } else if (state is RegisterMessage) {
               showShortSnackBar(context, state.message);
-            } else if (state is RegisterError || state is RegisterOffline) {}
+            }
           },
         ),
       ),

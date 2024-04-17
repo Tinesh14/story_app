@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,29 +48,37 @@ class ApiService {
     }
   }
 
-  Future<bool> addNewStory(String description, File photo,
+  Future<Map> addNewStory(String description, List<int> bytes, String fileName,
       {double? lat, double? lon}) async {
     try {
-      Map<String, dynamic> data = {
-        "description": description,
-        "photo": photo,
-        "lat": lat,
-        "lon": lon,
-      };
       var token =
           await _preferencesHelper.bearerTokenValue; //get token from storage
-      final response = await http.post(
-        Uri.parse("$_baseUrl/stories"),
-        headers: {
-          "Content-Type": "multipart/form-data",
-          "Authorization": "Bearer $token",
-        },
-        body: jsonEncode(data),
+      var request =
+          http.MultipartRequest('POST', Uri.parse("$_baseUrl/stories"));
+      final multiPartFile = http.MultipartFile.fromBytes(
+        "photo",
+        bytes,
+        filename: fileName,
       );
-      if (response.statusCode == 201) {
-        return true;
+      final Map<String, String> fields = {
+        "description": description,
+      };
+      final Map<String, String> headers = {
+        "Content-type": "multipart/form-data",
+        "Authorization": "Bearer $token",
+      };
+      request.files.add(multiPartFile);
+      request.fields.addAll(fields);
+      request.headers.addAll(headers);
+      final http.StreamedResponse streamedResponse = await request.send();
+      final int statusCode = streamedResponse.statusCode;
+
+      final Uint8List responseList = await streamedResponse.stream.toBytes();
+      final String responseData = String.fromCharCodes(responseList);
+      if (statusCode == 201) {
+        return jsonDecode(responseData);
       } else {
-        throw Exception('Failed to addNewStory');
+        throw Exception("Upload file error");
       }
     } catch (e) {
       rethrow;
