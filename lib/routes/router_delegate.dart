@@ -37,6 +37,7 @@ class MyRouterDelegate extends RouterDelegate
   List<Page> historyStack = [];
   bool isRegister = false;
   bool isAddStory = false;
+  Function? refreshListStory;
   List<Page> get _splashStack => const [
         MaterialPage(
           key: ValueKey("SplashScreen"),
@@ -56,16 +57,23 @@ class MyRouterDelegate extends RouterDelegate
               isLoggedIn = false;
               notifyListeners();
             },
-            onAddStory: () {
+            onAddStory: (p0) {
               isAddStory = true;
+              refreshListStory = p0;
               notifyListeners();
             },
           ),
         ),
         if (isAddStory)
-          const MaterialPage(
-            key: ValueKey("Add Story"),
-            child: NewStoryUi(),
+          MaterialPage(
+            key: const ValueKey("Add Story"),
+            child: NewStoryUi(
+              onRefreshListStory: () {
+                refreshListStory?.call();
+                isAddStory = false;
+                notifyListeners();
+              },
+            ),
           ),
         if (selectedStory != null)
           MaterialPage(
@@ -126,6 +134,7 @@ class MyRouterDelegate extends RouterDelegate
         isRegister = false;
         isAddStory = false;
         selectedStory = null;
+        refreshListStory = null;
         notifyListeners();
 
         return true;

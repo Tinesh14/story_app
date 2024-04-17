@@ -13,7 +13,7 @@ import 'package:story_app/widget/offline.dart';
 class ListStoryUi extends StatefulWidget {
   final Function(String?) onTapped;
   final Function() onLogout;
-  final Function() onAddStory;
+  final Function(Function) onAddStory;
   const ListStoryUi({
     super.key,
     required this.onTapped,
@@ -26,6 +26,7 @@ class ListStoryUi extends StatefulWidget {
 }
 
 class _ListStoryUiState extends State<ListStoryUi> {
+  ListStoryCubit? bloc;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,6 +43,7 @@ class _ListStoryUiState extends State<ListStoryUi> {
           ),
           child: BlocConsumer<ListStoryCubit, ListStoryState>(
             builder: (context, state) {
+              bloc = BlocProvider.of<ListStoryCubit>(context);
               if (state is ListStoryLoading) {
                 return const LoadingAnimation();
               } else if (state is ListStoryEmpty) {
@@ -49,14 +51,14 @@ class _ListStoryUiState extends State<ListStoryUi> {
               } else if (state is ListStoryError) {
                 return ErrorAnimation(
                   onPressed: () {
-                    BlocProvider.of<ListStoryCubit>(context).init(isLoad: true);
+                    bloc?.init(isLoad: true);
                   },
                   message: state.message,
                 );
               } else if (state is ListStoryOffline) {
                 return OfflineAnimation(
                   onPressed: () {
-                    BlocProvider.of<ListStoryCubit>(context).init(isLoad: true);
+                    bloc?.init(isLoad: true);
                   },
                 );
               } else if (state is ListStorySuccess) {
@@ -106,7 +108,9 @@ class _ListStoryUiState extends State<ListStoryUi> {
             child: const Icon(Icons.add),
             label: 'Add Story',
             onTap: () {
-              widget.onAddStory();
+              widget.onAddStory(
+                () => bloc?.init(isLoad: true),
+              );
             },
           ),
         ],

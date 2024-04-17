@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -5,7 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class NewStoryUi extends StatefulWidget {
-  const NewStoryUi({super.key});
+  Function() onRefreshListStory;
+  NewStoryUi({
+    super.key,
+    required this.onRefreshListStory,
+  });
 
   @override
   State<NewStoryUi> createState() => _NewStoryUiState();
@@ -43,11 +49,6 @@ class _NewStoryUiState extends State<NewStoryUi> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Container(
-                //   child: Lottie.asset(
-                //     'assets/image_placeholder_animation.json',
-                //   ),
-                // ),
                 imagePath != null
                     ? Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -110,6 +111,7 @@ class _NewStoryUiState extends State<NewStoryUi> {
                         FocusScope.of(context).unfocus();
                         if (formKey.currentState?.validate() ?? false) {
                           //trigger upload image
+                          widget.onRefreshListStory();
                         }
                       },
                       child: const Text("Upload"),
