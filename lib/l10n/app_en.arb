@@ -28,5 +28,6 @@
     "error": "Error",
     "tryAgain": "Try Again",
     "offline" : "This internet is offline !!!",
-    "detailStory": "Detail Story"
+    "detailStory": "Detail Story",
+    "location": "Location"
 }

@@ -28,5 +28,6 @@
     "error": "Kesalahan",
     "tryAgain": "Coba Lagi",
     "offline": "Tidak ada internet !!!",
-    "detailStory": "Detail Cerita"
+    "detailStory": "Detail Cerita",
+    "location": "Lokasi"
 }
