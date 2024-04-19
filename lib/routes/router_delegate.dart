@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart' as geo;
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:story_app/features/new_story/ui/new_story_ui.dart';
 import 'package:story_app/features/register/ui/register_ui.dart';
 import 'package:story_app/features/list_story/ui/list_story_ui.dart';
+import 'package:story_app/screen/picker_map_screen.dart';
 
 import '../features/login/ui/login_ui.dart';
 import '../features/detail_story/ui/detail_story_ui.dart';
-import '../splash_screen_ui.dart';
+import '../screen/splash_screen_ui.dart';
 import '../utils/preferences_helper.dart';
 
 class MyRouterDelegate extends RouterDelegate
@@ -37,7 +40,10 @@ class MyRouterDelegate extends RouterDelegate
   List<Page> historyStack = [];
   bool isRegister = false;
   bool isAddStory = false;
+  bool isPickerLocation = false;
   Function? refreshListStory;
+  Function(geo.Placemark placemark, LatLng location)? callbackPickerLocation;
+  LatLng? selectedLocation;
   List<Page> get _splashStack => const [
         MaterialPage(
           key: ValueKey("SplashScreen"),
@@ -71,6 +77,28 @@ class MyRouterDelegate extends RouterDelegate
               onRefreshListStory: () {
                 refreshListStory?.call();
                 isAddStory = false;
+                notifyListeners();
+              },
+              onPickerMap: (p0) {
+                isPickerLocation = true;
+                selectedLocation = p0;
+                notifyListeners();
+              },
+              onSetLocation: (p0) {
+                callbackPickerLocation = p0;
+                notifyListeners();
+              },
+            ),
+          ),
+        if (isPickerLocation && selectedLocation != null)
+          MaterialPage(
+            key: ValueKey(selectedLocation),
+            child: PickerScreen(
+              defaultLocation: selectedLocation!,
+              onSetPicker: (p0, p1) {
+                isPickerLocation = false;
+                selectedLocation = null;
+                callbackPickerLocation?.call(p0, p1);
                 notifyListeners();
               },
             ),
@@ -132,9 +160,16 @@ class MyRouterDelegate extends RouterDelegate
         }
 
         isRegister = false;
-        isAddStory = false;
+        if (isPickerLocation && selectedLocation != null) {
+          isPickerLocation = false;
+          selectedLocation = null;
+        } else {
+          isAddStory = false;
+        }
         selectedStory = null;
         refreshListStory = null;
+        isPickerLocation = false;
+        selectedLocation = null;
         notifyListeners();
 
         return true;

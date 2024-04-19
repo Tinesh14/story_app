@@ -60,6 +60,8 @@ class ApiService {
       final Map<String, String> fields = {
         "description": description,
       };
+      if (lat != null) fields['lat'] = lat.toString();
+      if (lon != null) fields['lon'] = lon.toString();
       final Map<String, String> headers = {
         "Content-type": "multipart/form-data",
         "Authorization": "Bearer $token",

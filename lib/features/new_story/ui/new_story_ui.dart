@@ -5,6 +5,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geocoding/geocoding.dart' as geo;
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:story_app/data/api/api_service.dart';
 import 'package:story_app/features/new_story/cubit/new_story_cubit.dart';
@@ -17,9 +19,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NewStoryUi extends StatefulWidget {
   Function() onRefreshListStory;
+  Function(LatLng) onPickerMap;
+  Function(Function(geo.Placemark, LatLng)) onSetLocation;
   NewStoryUi({
     super.key,
     required this.onRefreshListStory,
+    required this.onPickerMap,
+    required this.onSetLocation,
   });
 
   @override
@@ -33,6 +39,8 @@ class _NewStoryUiState extends State<NewStoryUi> {
   final descriptionController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   NewStoryCubit? cubit;
+  geo.Placemark? selectedPlacemark;
+  LatLng? selectedLatLng;
   @override
   void dispose() {
     descriptionController.dispose();
@@ -79,12 +87,9 @@ class _NewStoryUiState extends State<NewStoryUi> {
                               alignment: Alignment.center,
                               child: Icon(
                                 Icons.image,
-                                size: 350,
+                                size: 300,
                               ),
                             ),
-                      const SizedBox(
-                        height: 20,
-                      ),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -100,29 +105,66 @@ class _NewStoryUiState extends State<NewStoryUi> {
                         ],
                       ),
                       const SizedBox(
-                        height: 80,
+                        height: 30,
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 45),
-                        child: TextFormField(
-                          controller: descriptionController,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15.0),
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              controller: descriptionController,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
+                                hintText: locale.description,
+                              ),
+                              maxLines: 3,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return locale.validateDescription;
+                                }
+                                return null;
+                              },
                             ),
-                            hintText: locale.description,
-                          ),
-                          maxLines: 4,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return locale.validateDescription;
-                            }
-                            return null;
-                          },
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            TextFormField(
+                              controller: selectedPlacemark != null
+                                  ? TextEditingController(
+                                      text:
+                                          '${selectedPlacemark?.street}\n${selectedPlacemark?.locality}, ${selectedPlacemark?.postalCode}, ${selectedPlacemark?.country}')
+                                  : null,
+                              onTap: () async {
+                                var latLng = await cubit?.requestPermission();
+                                if (latLng != null) {
+                                  widget.onPickerMap(latLng);
+                                  widget.onSetLocation((placemark, location) {
+                                    setState(() {
+                                      selectedPlacemark = placemark;
+                                      selectedLatLng = location;
+                                    });
+                                  });
+                                }
+                              },
+                              maxLines: selectedPlacemark != null ? 3 : 1,
+                              readOnly: true,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
+                                hintText: "Picker Location",
+                              ),
+                              validator: (value) {
+                                return null;
+                              },
+                            ),
+                          ],
                         ),
                       ),
                       const SizedBox(
-                        height: 30,
+                        height: 20,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -131,7 +173,9 @@ class _NewStoryUiState extends State<NewStoryUi> {
                             onPressed: () async {
                               FocusScope.of(context).unfocus();
                               if (formKey.currentState?.validate() ?? false) {
-                                await upload();
+                                await upload(
+                                    lat: selectedLatLng?.latitude,
+                                    lon: selectedLatLng?.longitude);
                               }
                             },
                             child: Text(locale.upload),
@@ -150,13 +194,19 @@ class _NewStoryUiState extends State<NewStoryUi> {
             } else if (state is NewStoryOffline) {
               return OfflineAnimation(
                 onPressed: () async {
-                  await upload(loadAgain: true);
+                  await upload(
+                      loadAgain: true,
+                      lat: selectedLatLng?.latitude,
+                      lon: selectedLatLng?.longitude);
                 },
               );
             } else if (state is NewStoryError) {
               return ErrorAnimation(
                 onPressed: () async {
-                  await upload(loadAgain: true);
+                  await upload(
+                      loadAgain: true,
+                      lat: selectedLatLng?.latitude,
+                      lon: selectedLatLng?.longitude);
                 },
                 message: state.message,
               );
@@ -179,16 +229,18 @@ class _NewStoryUiState extends State<NewStoryUi> {
     );
   }
 
-  upload({bool loadAgain = false}) async {
+  upload({bool loadAgain = false, double? lat, double? lon}) async {
     if (imageFile != null) {
       var fileName = imageFile?.name;
       var bytes = await imageFile?.readAsBytes();
       var compress = await cubit?.compressImage(bytes!);
       if (loadAgain) {
-        cubit?.loadAgain(descriptionController.text, compress!, fileName ?? '');
+        cubit?.loadAgain(descriptionController.text, compress!, fileName ?? '',
+            lat: lat, lon: lon);
       } else {
         cubit?.uploadStory(
-            descriptionController.text, compress!, fileName ?? '');
+            descriptionController.text, compress!, fileName ?? '',
+            lat: lat, lon: lon);
       }
     }
   }
