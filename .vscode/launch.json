@@ -4,23 +4,70 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        
         {
-            "name": "story_app",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "story_app (profile mode)",
+            "name": "story_app_free",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "program": "lib/main_free.dart",
+            "args": [
+                "--flavor",
+                "free"
+              ]
         },
         {
-            "name": "story_app (release mode)",
+            "name": "story_app_free (profile mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
+            "program": "lib/main_free.dart",
+            "flutterMode": "profile",
+            "args": [
+                "--flavor",
+                "free"
+              ]
+        },
+        {
+            "name": "story_app_free (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main_free.dart",
+            "flutterMode": "release",
+            "args": [
+                "--flavor",
+                "free"
+              ]
+        },
+
+        {
+            "name": "story_app_paid",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main_paid.dart",
+            "args": [
+                "--flavor",
+                "paid"
+              ]
+        },
+        {
+            "name": "story_app_paid (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main_paid.dart",
+            "flutterMode": "profile",
+            "args": [
+                "--flavor",
+                "paid"
+              ]
+        },
+        {
+            "name": "story_app_paid (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main_paid.dart",
+            "flutterMode": "release",
+            "args": [
+                "--flavor",
+                "paid"
+              ]
         }
     ]
 }

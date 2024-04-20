@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:story_app/data/api/api_service.dart';
 import 'package:story_app/features/new_story/cubit/new_story_cubit.dart';
 import 'package:story_app/features/new_story/cubit/new_story_state.dart';
+import 'package:story_app/utils/flavor_config.dart';
 import 'package:story_app/utils/snackbar.dart';
 import 'package:story_app/widget/error.dart';
 import 'package:story_app/widget/loading.dart';
@@ -137,15 +138,22 @@ class _NewStoryUiState extends State<NewStoryUi> {
                                           '${selectedPlacemark?.street}\n${selectedPlacemark?.locality}, ${selectedPlacemark?.postalCode}, ${selectedPlacemark?.country}')
                                   : null,
                               onTap: () async {
-                                var latLng = await cubit?.requestPermission();
-                                if (latLng != null) {
-                                  widget.onPickerMap(latLng);
-                                  widget.onSetLocation((placemark, location) {
-                                    setState(() {
-                                      selectedPlacemark = placemark;
-                                      selectedLatLng = location;
+                                if (FlavorConfig.instance.flavor ==
+                                    FlavorType.paid) {
+                                  var latLng = await cubit?.requestPermission();
+                                  if (latLng != null) {
+                                    widget.onPickerMap(latLng);
+                                    widget.onSetLocation((placemark, location) {
+                                      setState(() {
+                                        selectedPlacemark = placemark;
+                                        selectedLatLng = location;
+                                      });
                                     });
-                                  });
+                                  }
+                                } else {
+                                  showShortSnackBar(
+                                      context, "Fitur ini berbayar");
+                                  FocusScope.of(context).unfocus();
                                 }
                               },
                               maxLines: selectedPlacemark != null ? 3 : 1,
