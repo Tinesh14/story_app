@@ -84,12 +84,14 @@ class ApiService {
     }
   }
 
-  Future<ListStory> getAllStories({int? page, int? size, int? location}) async {
+  Future<ListStory> getAllStories(
+      {int page = 0, int size = 10, int? location}) async {
     try {
       var token =
           await _preferencesHelper.bearerTokenValue; //get token from storage
+      final uri = Uri.parse("$_baseUrl/stories?page=$page&size=$size");
       final response = await http.get(
-        Uri.parse("$_baseUrl/stories"),
+        uri,
         headers: {
           "Authorization": "Bearer $token",
         },
