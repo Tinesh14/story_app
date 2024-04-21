@@ -165,9 +165,9 @@ class MyRouterDelegate extends RouterDelegate
           selectedLocation = null;
         } else {
           isAddStory = false;
+          refreshListStory = null;
         }
         selectedStory = null;
-        refreshListStory = null;
         isPickerLocation = false;
         selectedLocation = null;
         notifyListeners();

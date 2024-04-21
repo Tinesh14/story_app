@@ -23,11 +23,12 @@ class ListStoryCubit extends Cubit<ListStoryState> {
     try {
       if (isLoad) emit(ListStoryLoading());
       var response = await apiService.getAllStories(
-          page: 0, size: _numberOfPostsPerRequest);
+          page: _pageNumber, size: _numberOfPostsPerRequest);
       if (response.listStory?.isNotEmpty ?? false) {
+        dataStories = [];
         dataStories.addAll(response.listStory ?? []);
         listStorySuccess = ListStorySuccess(dataStories: dataStories);
-        emit(listStorySuccess);
+        emit(ListStorySuccess(dataStories: dataStories));
       } else {
         emit(ListStoryEmpty());
       }
@@ -47,12 +48,12 @@ class ListStoryCubit extends Cubit<ListStoryState> {
         listStorySuccess =
             listStorySuccess.copyWith(loading: true, pageNumber: _pageNumber);
         emit(listStorySuccess);
+        _pageNumber++;
         var response = await apiService.getAllStories(
             page: _pageNumber, size: _numberOfPostsPerRequest);
         List<Story> storyList = response.listStory ?? [];
         dataStories.addAll(response.listStory ?? []);
         if (storyList.isNotEmpty) {
-          _pageNumber = _pageNumber + 1;
           listStorySuccess = listStorySuccess.copyWith(
             dataStories: dataStories,
             loading: false,
